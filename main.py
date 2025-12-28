@@ -5,9 +5,9 @@ import cloudscraper
 import yaml
 import gzip
 import logging
+import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from pathlib import Path
-from bs4 import BeautifulSoup
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,7 +27,7 @@ def process_sitemap(url):
         if content[:2] == b'\x1f\x8b':  # gzip magic number
             content = gzip.decompress(content)
 
-        if b'<urlset' in content:
+        if b'<urlset' in content or b'<sitemapindex' in content:
             return parse_xml(content)
         else:
             return parse_txt(content.decode('utf-8'))
@@ -39,12 +39,18 @@ def process_sitemap(url):
         return []
 
 def parse_xml(content):
+    try:
+        root = ET.fromstring(content)
+    except ET.ParseError as e:
+        logging.error(f"XML parse error: {str(e)}")
+        return []
+
     urls = []
-    soup = BeautifulSoup(content, 'xml')
-    for loc in soup.find_all('loc'):
-        url = loc.get_text().strip()
-        if url:
-            urls.append(url)
+    for loc in root.findall('.//{*}loc'):
+        if loc.text:
+            url = loc.text.strip()
+            if url:
+                urls.append(url)
     return urls
 
 def parse_txt(content):

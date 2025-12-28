@@ -5,7 +5,7 @@ sites:
     active: true
 
 feishu:
-  webhook_url: ""
+  webhook_url: "https://open.feishu.cn/open-apis/bot/v2/hook/761b3598-7ff5-4e58-b6d1-3bf80d9294dc"
   secret: ""
 
 retention_days: 1
