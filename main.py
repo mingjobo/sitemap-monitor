@@ -106,7 +106,7 @@ def send_feishu_notification(new_urls, config, site_name):
         "msg_type": "interactive",
         "card": {
             "header": {
-                "title": {"tag": "plain_text", "content": f"🎮 {site_name} 游戏上新通知"},
+                "title": {"tag": "plain_text", "content": f"{site_name} sitemap更新通知"},
                 "template": "green"
             },
             "elements": [
@@ -114,7 +114,7 @@ def send_feishu_notification(new_urls, config, site_name):
                     "tag": "div",
                     "text": {
                         "tag": "lark_md",
-                        "content": f"**今日新增 {len(new_urls)} 款游戏**\n\n" + "\n".join(f"• {url}" for url in new_urls[:10])
+                        "content": f"**今日新增 {len(new_urls)} 个网页**\n\n" + "\n".join(f"• {url}" for url in new_urls[:10])
                     }
                 }
             ]
